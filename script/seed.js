@@ -6,7 +6,8 @@ const {
   seedTasks,
   seedBoards,
   seedChecklistItems,
-  seedMantra
+  seedMantra,
+  seedAssociations
 } = require('../script/seed-data')
 
 // We've separated the `seed` function from the `runSeed` function.
@@ -21,6 +22,7 @@ async function runSeed() {
     await seedTasks()
     await seedChecklistItems()
     await seedMantra()
+    await seedAssociations()
   } catch (err) {
     console.error(err)
     process.exitCode = 1

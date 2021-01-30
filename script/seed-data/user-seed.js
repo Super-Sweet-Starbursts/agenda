@@ -180,14 +180,6 @@ const users = [
 
 const seedUsers = async () => {
   try {
-    await User.create({
-      email: 'cody@email.com',
-      firstName: 'Cody',
-      lastName: 'the Pug',
-      password: '123456',
-      isAdmin: true
-    })
-
     await User.bulkCreate(users)
   } catch (err) {
     console.log(err)

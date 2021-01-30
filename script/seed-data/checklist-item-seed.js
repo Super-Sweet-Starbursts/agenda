@@ -1,4 +1,4 @@
-const {ChecklistItem} = require('../../server/db/models')
+const {ChecklistItem, User} = require('../../server/db/models')
 
 const checklistItemData = [
   {description: 'Fold Laundry', completed: false},
@@ -58,12 +58,15 @@ const checklistItemData = [
 ]
 
 const seedChecklistItems = async () => {
+  const users = await User.findAll()
   await Promise.all(
-    checklistItemData.map(items => {
-      ChecklistItem.create({
+    checklistItemData.map(async items => {
+      const item = await ChecklistItem.create({
         description: items.description,
         completed: items.completed
       })
+      const index = Math.floor(Math.random() * users.length)
+      await item.setUser(users[index])
     })
   )
   console.log('CheckList Items seeded successfully')

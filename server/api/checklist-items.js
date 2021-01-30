@@ -39,14 +39,25 @@ router.post('/', async (req, res, next) => {
 // api/checklist/:itemId  --update item in checklist
 router.put('/:itemId', async (req, res, next) => {
   try {
-    const currentItemId = req.params.id
-    const updatedItem = await ChecklistItem.findOne({
+    const currentItemId = req.params.itemId
+    const updatedItem = await ChecklistItem.findByPk(currentItemId)
+    await updatedItem.update(req.body)
+    res.send(204).end()
+  } catch (err) {
+    next(err)
+  }
+})
+
+// api/checklist/:itemId/delete  --delete item in checklist
+router.delete('/:itemId/delete', async (req, res, next) => {
+  try {
+    const currentItemId = req.params.itemId
+    await ChecklistItem.destroy({
       where: {
         id: currentItemId
       }
     })
-    await updatedItem.update(req.body)
-    res.status(204).end()
+    res.send(204).end()
   } catch (err) {
     next(err)
   }

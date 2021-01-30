@@ -1,4 +1,4 @@
-const {Board} = require('../../server/db/models')
+const {Board, User} = require('../../server/db/models')
 
 const boardData = [
   {
@@ -200,12 +200,22 @@ const boardData = [
 ]
 
 const seedBoards = async () => {
+  const users = await User.findAll()
   await Promise.all(
-    boardData.map(board => {
-      Board.create({
+    boardData.map(async board => {
+      const newBoard = await Board.create({
         name: board.name,
         type: board.type
       })
+      // if the new board is a team board, get 3 random users and add them
+      if (newBoard.type === 'team') {
+        const userCopy = [...users]
+        const startIndex = Math.floor(Math.random() * users.length)
+        const userArray = userCopy.slice(startIndex, startIndex + 3)
+        await newBoard.setUsers(userArray)
+      } else {
+        newBoard.setUsers(users[Math.floor(Math.random() * users.length)])
+      }
     })
   )
 }

@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
 
-const ChecklistItem = db.define('checklist-item', {
+const ChecklistItem = db.define('checklistItem', {
   description: {
     type: Sequelize.STRING,
     allowNull: false,

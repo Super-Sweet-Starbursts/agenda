@@ -1,4 +1,4 @@
-const {Task} = require('../../server/db/models')
+const {Task, Board} = require('../../server/db/models')
 const txtgen = require('txtgen')
 
 const personVerb = [
@@ -67,14 +67,16 @@ const types = Task.rawAttributes.type.values
 const labels = Task.rawAttributes.label.values
 
 const seedTasks = async () => {
+  const boards = await Board.findAll()
   for (let i = 0; i < 50; i++) {
-    await Task.create({
+    const newTask = await Task.create({
       name: getRandomTaskName(),
       description: txtgen.paragraph(),
       dueDate: new Date(),
       type: types[Math.floor(Math.random() * types.length)],
       label: labels[Math.floor(Math.random() * labels.length)]
     })
+    await newTask.setBoard(boards[Math.floor(Math.random() * boards.length)])
   }
 
   console.log('Tasks seeded successfully!')
